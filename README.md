@@ -1,4 +1,4 @@
-knuth-up-arrow
+R Hyperoperation Sequence
 =============================
 
 An R implementation of the [hyperoperation sequence](https://en.wikipedia.org/wiki/Hyperoperation) and [Knuth's up-arrow notation](https://en.wikipedia.org/wiki/Knuth%27s_up-arrow_notation).
