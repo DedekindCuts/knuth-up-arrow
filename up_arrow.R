@@ -1,8 +1,7 @@
 suppressPackageStartupMessages(library(bit64))
 
-up_arrow <- function(a, n, b){
-
-	#check for good input
+up_arrow64 <- function(a, n, b){
+	# check for good input
 	if(a < 0 | (a - as.integer64(a) != 0)){
 		stop("a must be a nonnegative integer")
 	}
@@ -18,12 +17,34 @@ up_arrow <- function(a, n, b){
 	n.big <- as.integer64(n)
 	b.big <- as.integer64(b)
 
-	#evaluate
+	# evaluate
 	if(n.big == 0){
 		return(a.big*b.big)
 	} else if(b.big == 0){
 		return(1)
 	} else {
-		return(up_arrow(a.big, n.big - 1, up_arrow(a.big, n.big, b.big-1)))
+		return(up_arrow64(a.big, n.big - 1, up_arrow64(a.big, n.big, b.big-1)))
+	}
+}
+
+up_arrow <- function(a, n, b){
+	# check for good input
+	if(a < 0 | (a - as.integer(a) != 0)){
+		stop("a must be a nonnegative integer")
+	}
+	if(n < 0 | (n - as.integer(n) != 0)){
+		stop("Number of arrows must be a nonnegative integer")
+	}
+	if(b < 0 | (b - as.integer(b) != 0)){
+		stop("b must be a nonnegative integer")
+	}
+
+	# evaluate
+	if(n == 0){
+		return(a*b)
+	} else if(b == 0){
+		return(1)
+	} else {
+		return(up_arrow(a, n-1, up_arrow(a, n, b-1)))
 	}
 }
