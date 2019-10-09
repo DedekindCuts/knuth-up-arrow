@@ -1,50 +1,50 @@
-suppressPackageStartupMessages(library(bit64))
-
-up_arrow64 <- function(a, n, b){
-	# check for good input
-	if(a < 0 | (a - as.integer64(a) != 0)){
-		stop("a must be a nonnegative integer")
-	}
-	if(n < 0 | (n - as.integer64(n) != 0)){
-		stop("Number of arrows must be a nonnegative integer")
-	}
-	if(b < 0 | (b - as.integer64(b) != 0)){
-		stop("b must be a nonnegative integer")
-	}
-
-	# store inputs as 64-bit integers
-	a.big <- as.integer64(a)
-	n.big <- as.integer64(n)
-	b.big <- as.integer64(b)
-
-	# evaluate
-	if(n.big == 0){
-		return(a.big*b.big)
-	} else if(b.big == 0){
-		return(1)
+hyp_val <- function(x){
+	x.int <- as.integer(x)
+	if(x < 0 | (x - x.int != 0)){
+		stop(paste(x, "is not a nonnegative integer"))
 	} else {
-		return(up_arrow64(a.big, n.big - 1, up_arrow64(a.big, n.big, b.big-1)))
+		return(x.int)
 	}
 }
 
-up_arrow <- function(a, n, b){
-	# check for good input
-	if(a < 0 | (a - as.integer(a) != 0)){
-		stop("a must be a nonnegative integer")
+hyp <- function(a, n, b){
+	if(n == 0){
+		return(b + 1)
+	} else if(b == 0){
+		if(n == 1){
+			return(a)
+		} else if(n == 2){
+			return(0)
+		} else {
+			return(1)
+		}
+	} else if(n == 1){
+		return(a + b)
+	} else if(n == 2){
+		return(a * b)
+	} else if(n == 3){
+		return(a ^ b)
+	} else {
+		return(hyp(a, n-1, hyp(a, n, b-1)))
 	}
-	if(n < 0 | (n - as.integer(n) != 0)){
-		stop("Number of arrows must be a nonnegative integer")
-	}
-	if(b < 0 | (b - as.integer(b) != 0)){
-		stop("b must be a nonnegative integer")
-	}
+}
+
+hyper <- function(a, n, b){
+	# validate input
+	a.int <- hyp_val(a)
+	n.int <- hyp_val(n)
+	b.int <- hyp_val(b)
 
 	# evaluate
-	if(n == 0){
-		return(a*b)
-	} else if(b == 0){
-		return(1)
-	} else {
-		return(up_arrow(a, n-1, up_arrow(a, n, b-1)))
-	}
+	return(hyp(a.int, n.int, b.int))
+}
+
+up_arrow <- function(a, n, b){
+	# validate input
+	a.int <- hyp_val(a)
+	n.int <- hyp_val(n)
+	b.int <- hyp_val(b)
+
+	# evaluate
+	return(hyp(a.int, n.int + 2, b.int))
 }
